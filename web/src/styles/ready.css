@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap");
+.btn-btn-primary {
+  background: #007BFF;
+  border: none;
+  height: 50px;
+  width: 100%;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-btn-primary:hover {
+  transition: filter 0.5s;
+  filter: brightness(0.9);
+}
+
+.btn-btn-primary-outline {
+  background: transparent;
+  border: 1px solid #007BFF;
+  width: 100%;
+  height: 50px;
+  color: #000;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-btn-primary-outline:hover {
+  transition: all 0.5s;
+  background: #007BFF;
+  color: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+}
+
+body {
+  background: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  background: #fff;
+  width: 450px;
+  height: 600px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+}
+.login-card .login-content {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-control {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  height: 50px;
+  padding: 20px;
+  outline: none;
+}
+.form-control::-moz-placeholder {
+  text-transform: uppercase;
+}
+.form-control::placeholder {
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: #858585;
+  margin-top: 10px;
+}
+
+.block {
+  color: #007BFF;
+}/*# sourceMappingURL=ready.css.map */
