@@ -13,6 +13,24 @@
     filter : brightness(0.9);
   }
 }
+.btn-btn-info-small {
+  background: rgb(25, 32, 39);
+  border: none;
+  height: 50px;
+  width: 60%;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    transition: filter 0.5s;
+    filter : brightness(0.9);
+  }
+}
 .btn-btn-primary-outline {
   background: transparent;
   border: 1px solid #007BFF;

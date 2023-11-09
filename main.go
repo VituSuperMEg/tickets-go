@@ -30,6 +30,9 @@ func main() {
 
 	fs := http.FileServer(http.Dir("public"))
 	router.Handle("/", http.StripPrefix("/", fs))
+
+	// Films
+	router.HandleFunc("/films", listFilmHandler).Methods("GET")
 	router.HandleFunc("/films", registerFilmHandler).Methods("POST")
 
 	// UserRoutes
@@ -82,7 +85,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := map[string]string{"token": token}
+	response := map[string]string{"token": token, "user": username}
 	json.NewEncoder(w).Encode(response)
 }
 func comparePasswords(hashedPwd string, plainPwd string) error {
@@ -123,7 +126,7 @@ func registerFilmHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newFilm, err := filmUseCase.Register(filmData.Film_name, filmData.Film_count, filmData.Film_time)
+	newFilm, err := filmUseCase.Register(filmData.Film_name, filmData.Film_count, filmData.Film_time, filmData.Description, filmData.ImagePath)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -132,4 +135,13 @@ func registerFilmHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(newFilm)
+}
+func listFilmHandler(w http.ResponseWriter, r *http.Request) {
+	films, err := filmUseCase.List()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(films)
 }

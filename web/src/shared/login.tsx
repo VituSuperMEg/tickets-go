@@ -1,23 +1,18 @@
-import { useFormik, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import { useState } from "react";
 import { api } from "../services/api";
 import Swal from "sweetalert2";
-import * as yup from "yup";
-
-const Validation = yup.object().shape({
-  login : yup.string().required("Digite a senha!")
-})
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const [isValid, setIsValid] = useState(false);
-  
+  const navigate = useNavigate()
   const isLogin = useFormik({
     initialValues : {
       login: "",
       password: "",
     },
     onSubmit : async (values) => {
-      
       try {
         const response = await api.post("/login", {
           login: values.login,
@@ -25,7 +20,7 @@ export function Login() {
         });
         console.log(response.data);
         if (response.data.token) {
-          setIsValid(true);
+          navigate("/admin");
         }
       } catch (error) {
         if (error.response && error.response.data && error.response.data.error) {

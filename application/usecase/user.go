@@ -41,7 +41,6 @@ func (u *UserUseCast) Register(login string, email string, password string, perf
 }
 func (u *UserUseCast) Find(login string) (*model.User, error) {
 	user, err := u.UserRepository.Find(login)
-
 	if err != nil {
 		fmt.Println("user is not found")
 	}

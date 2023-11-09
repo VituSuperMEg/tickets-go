@@ -43,3 +43,11 @@ func (f *FilmRepositoryDB) Delete(id string) error {
 	}
 	return nil
 }
+func (f *FilmRepositoryDB) List() ([]*model.Film, error) {
+	var films []*model.Film
+	err := f.DB.Find(&films).Error
+	if err != nil {
+		return nil, err
+	}
+	return films, nil
+}

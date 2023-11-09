@@ -10,8 +10,8 @@ type FilmUseCast struct {
 	FilmRepository model.FilmRepositoryInterface
 }
 
-func (f *FilmUseCast) Register(name string, count int, time int64) (*model.Film, error) {
-	film, err := model.NewFilm(name, count, time)
+func (f *FilmUseCast) Register(name string, count int, time int64, description string, image string) (*model.Film, error) {
+	film, err := model.NewFilm(name, count, time, description, image)
 	if err != nil {
 		return nil, err
 	}
@@ -21,4 +21,11 @@ func (f *FilmUseCast) Register(name string, count int, time int64) (*model.Film,
 		return film, nil
 	}
 	return nil, errors.New("unable to find film this repository describes")
+}
+func (f *FilmUseCast) List() ([]*model.Film, error) {
+	films, err := f.FilmRepository.List()
+	if err != nil {
+		return nil, err
+	}
+	return films, nil
 }
