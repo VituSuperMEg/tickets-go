@@ -25,9 +25,9 @@ func (u *UserRepositoryDB) Save(user *model.User) error {
 	}
 	return nil
 }
-func (u *UserRepositoryDB) Find(id string) (*model.User, error) {
+func (u *UserRepositoryDB) Find(login string) (*model.User, error) {
 	var user model.User
-	u.DB.First(&user, "id = ?", id)
+	u.DB.First(&user, "login = ?", login)
 	if user.ID == "" {
 		return nil, fmt.Errorf("no ticket was found")
 	}

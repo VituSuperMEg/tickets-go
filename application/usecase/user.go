@@ -20,7 +20,7 @@ func hashPassword(password string) (string, error) {
 	return string(hash), nil
 }
 
-func (u *UserUseCast) Register(name string, email string, password string, perfil string) (*model.User, error) {
+func (u *UserUseCast) Register(login string, email string, password string, perfil string) (*model.User, error) {
 
 	hash, err := hashPassword(password)
 
@@ -28,7 +28,7 @@ func (u *UserUseCast) Register(name string, email string, password string, perfi
 		fmt.Println("Erro a gerar senha!", err)
 		return nil, err
 	}
-	user, err := model.NewUser(name, email, hash, perfil)
+	user, err := model.NewUser(login, email, hash, perfil)
 
 	if err != nil {
 		return nil, err
@@ -38,4 +38,12 @@ func (u *UserUseCast) Register(name string, email string, password string, perfi
 		return user, nil
 	}
 	return nil, errors.New("unable to find film this repository describes")
+}
+func (u *UserUseCast) Find(login string) (*model.User, error) {
+	user, err := u.UserRepository.Find(login)
+
+	if err != nil {
+		fmt.Println("user is not found")
+	}
+	return user, nil
 }

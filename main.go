@@ -6,10 +6,13 @@ import (
 	"net/http"
 
 	"github.com/VituSuperMEg/tickets-go/application/usecase"
+	"github.com/VituSuperMEg/tickets-go/auth"
 	"github.com/VituSuperMEg/tickets-go/domain/model"
 	"github.com/VituSuperMEg/tickets-go/infra/db"
 	"github.com/VituSuperMEg/tickets-go/infra/repository"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var filmUseCase *usecase.FilmUseCast
@@ -31,7 +34,59 @@ func main() {
 
 	// UserRoutes
 	router.HandleFunc("/user", registerUserHandler).Methods("POST")
-	log.Fatal(http.ListenAndServe(":1010", router))
+
+	// Login
+	router.HandleFunc("/login", loginHandler).Methods("POST")
+
+	// Cors
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
+	origins := handlers.AllowedOrigins([]string{"*"}) // Altere "*" para o domínio específico que você deseja permitir
+
+	log.Fatal(http.ListenAndServe(":1010", handlers.CORS(headers, methods, origins)(router)))
+}
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Método não encontrado"})
+		return
+	}
+
+	var requestData map[string]string
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Erro ao decodificar a solicitação"})
+		return
+	}
+
+	username, password := requestData["login"], requestData["password"]
+
+	user, err := userUseCase.Find(username)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Usuário não encontrado"})
+		return
+	}
+
+	if err = comparePasswords(user.Password, password); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Credenciais inválidas"})
+		return
+	}
+
+	token, err := auth.GenerateJWT(username, password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Falha ao gerar token"})
+		return
+	}
+
+	response := map[string]string{"token": token}
+	json.NewEncoder(w).Encode(response)
+}
+func comparePasswords(hashedPwd string, plainPwd string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPwd), []byte(plainPwd))
 }
 func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
@@ -45,7 +100,7 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUser, err := userUseCase.Register(userData.Name, userData.Email, userData.Password, userData.Perfil)
+	newUser, err := userUseCase.Register(userData.Login, userData.Email, userData.Password, userData.Perfil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

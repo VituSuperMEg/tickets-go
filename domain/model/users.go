@@ -9,7 +9,7 @@ import (
 
 type User struct {
 	Base     `valid:"required"`
-	Name     string `json:"name" gorm:"type:varchar(200)" valid:"notnull"`
+	Login    string `json:"login" gorm:"type:varchar(200)" valid:"notnull"`
 	Email    string `json:"email" gorm:"type:varchar(200)" valid:"notnull"`
 	Password string `json:"password" gorm:"type:varchar(200)" valid:"notnull"`
 	Perfil   string `json:"perfil" gorm:"type:varchar(200)" valid:"notnull"`
@@ -33,9 +33,9 @@ func (User) TableName() string {
 	return "users"
 }
 
-func NewUser(name string, email string, password string, perfil string) (*User, error) {
+func NewUser(login string, email string, password string, perfil string) (*User, error) {
 	user := User{
-		Name:     name,
+		Login:    login,
 		Email:    email,
 		Password: password,
 		Perfil:   perfil,

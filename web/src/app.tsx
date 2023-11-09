@@ -1,7 +1,10 @@
-import { Login } from "./shared/login";
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './Routes/router';
 
 export function App() {
   return (
-    <Login />
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
   )
 }
