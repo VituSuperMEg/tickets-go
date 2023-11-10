@@ -34,7 +34,7 @@ func main() {
 	// Films
 	router.HandleFunc("/films", listFilmHandler).Methods("GET")
 	router.HandleFunc("/films", registerFilmHandler).Methods("POST")
-
+	router.HandleFunc("/films/{id}", findFilmHandler).Methods("GET")
 	// UserRoutes
 	router.HandleFunc("/user", registerUserHandler).Methods("POST")
 
@@ -113,6 +113,8 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(newUser)
 }
+
+// Films
 func registerFilmHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -144,4 +146,16 @@ func listFilmHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(films)
+}
+func findFilmHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	filmID := params["id"]
+
+	film, err := filmUseCase.Find(filmID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(film)
 }

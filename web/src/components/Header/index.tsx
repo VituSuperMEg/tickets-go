@@ -1,18 +1,20 @@
+import { Link } from 'react-router-dom';
+
 export function Header() {
   return(
     <div className="header">
       <h1>Cinema Go</h1>
 
       <ul className="menu">
-        <li>
+       <Link to="/admin" className='link'>
           Dashboard
-        </li>
-        <li>
+        </Link>
+        <Link to="/cadastros" className='link'>
           Cadastros
-        </li>
-        <li>
+        </Link>
+        <Link to="/config" className='link'>
           Configurações
-        </li>
+        </Link>
       </ul>
     </div>
   )

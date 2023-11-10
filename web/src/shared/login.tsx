@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const [isValid, setIsValid] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const isLogin = useFormik({
     initialValues : {
       login: "",

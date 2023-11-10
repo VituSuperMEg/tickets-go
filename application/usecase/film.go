@@ -29,3 +29,10 @@ func (f *FilmUseCast) List() ([]*model.Film, error) {
 	}
 	return films, nil
 }
+func (f *FilmUseCast) Find(id string) (*model.Film, error) {
+	films, err := f.FilmRepository.Find(id)
+	if err != nil {
+		return nil, err
+	}
+	return films, nil
+}

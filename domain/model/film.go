@@ -37,7 +37,10 @@ func List() ([]*Film, error) {
 	var films []*Film
 	return films, nil
 }
-
+func Find(id string) (*Film, error) {
+	var films *Film
+	return films, nil
+}
 func NewFilm(name string, count int, time_hour int64, description string, image string) (*Film, error) {
 	film := Film{
 		Film_name:   name,
